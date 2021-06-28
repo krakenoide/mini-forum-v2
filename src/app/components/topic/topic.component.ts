@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm.component';
 import { Message } from 'src/app/models/Message';
 import { Topic } from 'src/app/models/Topic';
 import { User } from 'src/app/models/User';
@@ -25,6 +27,7 @@ export class TopicComponent implements OnInit, OnDestroy {
     connectedUserSubscription: Subscription;
 
     refreshMessageInterval: any;
+    dialogRefSubscription: Subscription;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -32,7 +35,8 @@ export class TopicComponent implements OnInit, OnDestroy {
         private topicsService: TopicsService,
         private messagesService: MessagesService,
         private route: ActivatedRoute,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -143,5 +147,29 @@ export class TopicComponent implements OnInit, OnDestroy {
         if (this.form.controls[formControlName].hasError('maxlength')) {
             return 'Vous ne pouvez pas entrer plus de ' + this.form.controls[formControlName].getError('maxlength').requiredLength + ' caractères';
         }
+    }
+
+    onDeleteMessage(message:Message):void{
+        const dialogRef = this.dialog.open(DialogConfirmComponent, {
+            data: {
+                title: 'Êtes-vous sûr de vouloir supprimer ce sujet ?',
+                content: 'Cette action est irréversible.',
+                action: 'Supprimer'
+            },
+            autoFocus: false
+        });
+
+        this.dialogRefSubscription = dialogRef.afterClosed().subscribe(confirm => {
+            if (confirm) {
+                this.messagesService.deleteMessage(message).subscribe(response => {
+                    this.messagesService.messages = this.messagesService.messages.filter(messageElt => messageElt.id !== message.id);
+                    this.messagesService.emitMessages();
+        
+                    this.snackBar.open('Le message a bien été supprimé', 'Fermer', { duration: 3000 });
+                }, error => {
+                    this.snackBar.open('Une erreur est survenue. Veuillez vérifier votre saisie', 'Fermer', { duration: 3000 });
+                });
+            }
+        });
     }
 }
