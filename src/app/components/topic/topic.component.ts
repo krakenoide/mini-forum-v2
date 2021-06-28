@@ -29,6 +29,8 @@ export class TopicComponent implements OnInit, OnDestroy {
     refreshMessageInterval: any;
     dialogRefSubscription: Subscription;
 
+    bbcodeinfo:number=0;
+
     constructor(
         private formBuilder: FormBuilder,
         private usersService: UsersService,
