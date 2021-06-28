@@ -11,12 +11,12 @@
             <span *ngIf="connectedUser.username===message.author.username" class="currentuser">
             <h3>{{ message | messageInfos }}</h3>
     
-            <p>{{ message.content }}</p>
+            <p>{{ message  | messageStyle }}</p>
             </span>
             <span *ngIf="connectedUser.username!=message.author.username" class="otheruser">
                 <h3>{{ message | messageInfos }}</h3>
         
-                <p>{{ message.content }}</p>
+                <p [innerHTML] =  "message | messageStyle " > </p>
             </span>
 
             <mat-form-field *ngIf="editedMessage === message">
@@ -25,7 +25,7 @@
                 <mat-error *ngIf="editMessageControl.invalid">{{ getErrorMessage("editedMessage") }}</mat-error>
             </mat-form-field>
 
-            <span *ngIf="connectedUser.admin===true && connectedUser.id!==message.author.id" class="action-buttons-other-container">
+            <span *ngIf="connectedUser.admin===true && connectedUser.id!==message.author.id" class="action-buttons-admin-container">
                 <button mat-raised-button color="warn"  (click)="onDeleteMessage(message)">Supprimer</button>
             </span>
 
