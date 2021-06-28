@@ -43,7 +43,7 @@ ul {
     height: 50px;
 }
 
-.action-buttons-other-container {
+.action-buttons-admin-container {
     display: flex;
     justify-content: space-between;
     width: 130px;
