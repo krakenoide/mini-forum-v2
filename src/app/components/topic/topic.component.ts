@@ -24,6 +24,8 @@ export class TopicComponent implements OnInit, OnDestroy {
     connectedUser: User;
     connectedUserSubscription: Subscription;
 
+    refreshMessageInterval: any;
+
     constructor(
         private formBuilder: FormBuilder,
         private usersService: UsersService,
@@ -54,9 +56,13 @@ export class TopicComponent implements OnInit, OnDestroy {
         });
 
         this.usersService.emitConnectedUser();
+
+        this.refreshMessageInterval = setInterval(() => {
+            this.onRefreshMessages(false);
+        }, 10000);
     }
 
-    onRefreshMessages(): void {
+    onRefreshMessages(snackbarMessage:boolean): void {
         this.topicsService.getTopic(this.topic.id!).subscribe((topic: Topic) => {
             topic.date = new Date(topic.date);
 
@@ -66,9 +72,13 @@ export class TopicComponent implements OnInit, OnDestroy {
             });
 
             this.topic = topic;
-            this.snackBar.open('Messages actualisés', 'Fermer', { duration: 3000 });
+            if(snackbarMessage){
+                this.snackBar.open('Messages actualisés', 'Fermer', { duration: 3000 });
+            }
         }, error => {
-            this.snackBar.open('Une erreur est survenue lors de l\'actualisation des messages', 'Fermer', { duration: 3000 });
+            if(snackbarMessage){
+                this.snackBar.open('Une erreur est survenue lors de l\'actualisation des messages', 'Fermer', { duration: 3000 });
+            }
         });
     }
 
@@ -114,6 +124,10 @@ export class TopicComponent implements OnInit, OnDestroy {
 
         if (this.topicSubscription) {
             this.topicSubscription.unsubscribe();
+        }
+
+        if(this.refreshMessageInterval){
+            clearInterval(this.refreshMessageInterval);
         }
     }
 

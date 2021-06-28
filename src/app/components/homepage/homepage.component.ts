@@ -2,12 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
+import { Subscription ,interval, Observable} from 'rxjs';
 import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm.component';
 import { Topic } from 'src/app/models/Topic';
 import { User } from 'src/app/models/User';
 import { TopicsService } from 'src/app/services/TopicsService';
 import { UsersService } from 'src/app/services/UsersService';
+import { takeWhile } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'homepage',
@@ -30,15 +32,21 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
     dialogRefSubscription: Subscription;
 
+    refreshTopicInterval: any;
+
+
+
     constructor(
         private formBuilder: FormBuilder,
         private usersService: UsersService,
         private topicsService: TopicsService,
         private snackBar: MatSnackBar,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
+
         this.usersService.connectedUserSubject.subscribe((user: User) => {
             this.connectedUser = user;
 
@@ -49,6 +57,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
         });
 
         this.usersService.emitConnectedUser();
+
 
         this.topicsService.topicsSubject.subscribe((topics: Topic[]) => {
             this.topics = topics;
@@ -66,9 +75,20 @@ export class HomepageComponent implements OnInit, OnDestroy {
         });
 
         this.topicsService.emitTopics();
+        
+        this.refreshTopicInterval = setInterval(() => {
+                this.topicsService.refreshTopics();
+        }, 10000);
 
         this.editTopicControl = this.formBuilder.control(['', [Validators.minLength(5), Validators.maxLength(100)]]);
     }
+
+    loadTopic():void {
+       
+
+       
+    }
+
 
     onChangeEditedTopic(topic: Topic): void {
         this.editedTopic = (this.editedTopic === topic) ? undefined : topic;
@@ -157,6 +177,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
         if (this.topicsSubscription) {
             this.topicsSubscription.unsubscribe();
+        }
+
+        if(this.refreshTopicInterval){
+            clearInterval(this.refreshTopicInterval);
         }
     }
 

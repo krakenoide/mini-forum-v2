@@ -1,7 +1,7 @@
 <div *ngIf="topic">
     <div id="topic-title-header">
         <h2>{{ topic.title }}</h2>
-        <button mat-raised-button color="primary" (click)="onRefreshMessages()">Actualiser les messages</button>
+        <button mat-raised-button color="primary" (click)="onRefreshMessages(true)">Actualiser les messages</button>
     </div>
     
     <p id="topic-infos">{{ topic | topicInfos }}</p>
