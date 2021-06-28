@@ -1,1 +1,25 @@
-<p>users-page works!</p>
+<section>
+    <mat-form-field>
+        <mat-label>Filtrer par nom d'utilisateur</mat-label>
+        <input type="text" matInput [formControl]="filterControl">
+    </mat-form-field>
+
+    <ul>
+        <li *ngFor="let user of users" [title]="user.username">
+            <span *ngIf="editedUser !== user">{{ user.usersame }}</span>
+
+            <mat-form-field *ngIf="editedUser === user && connectedUser">
+                <mat-label>Titre</mat-label>
+                <input type="text" matInput required [formControl]="editUserControl">
+                <mat-error *ngIf="editUserControl.invalid">{{ getErrorMessage(null, editTopicControl) }}</mat-error>
+            </mat-form-field>
+            
+            <div class="action-buttons-container" *ngIf="connectedUser.admin || user.id===connectedUser.id">
+                <button mat-raised-button color="primary" *ngIf="editedUser !== user" (click)="onChangeEditedUser(user)">Modifier</button>
+                <button mat-raised-button color="accent" *ngIf="editedUser === user" (click)="onEditUser(user)">Enregistrer</button>
+
+                <button mat-raised-button color="warn" (click)="onDeleteUser(User)">Supprimer</button>
+            </div>
+        </li>
+    </ul>
+</section>
