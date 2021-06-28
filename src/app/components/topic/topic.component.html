@@ -18,9 +18,18 @@
         
                 <p>{{ message.content }}</p>
             </span>
-            <span *ngIf="connectedUser.admin===true" class="action-buttons-container">
-                <button mat-raised-button color="warn" (click)="onDeleteMessage(message)">Supprimer</button>
-            </span>
+
+            <mat-form-field *ngIf="editedMessage === message">
+                <mat-label>Titre</mat-label>
+                <input type="text" matInput required [formControl]="editMessageControl">
+                <mat-error *ngIf="editMessageControl.invalid">{{ getErrorMessage("editedMessage") }}</mat-error>
+            </mat-form-field>
+
+            <span *ngIf="connectedUser.admin===true || connectedUser.id===message.author.id" class="action-buttons-container">
+                <button mat-raised-button color="primary" *ngIf="editedMessage !== message && connectedUser.id===message.author.id" (click)="onChangeEditedMessage(message)">Modifier</button>
+                <button mat-raised-button color="accent" *ngIf="editedMessage === message && connectedUser.id===message.author.id" (click)="onEditMessage(message)">Enregistrer</button>
+                <button mat-raised-button color="warn"  (click)="onDeleteMessage(message)">Supprimer</button>
+          </span>
         </li>
     </ul>
 </div>

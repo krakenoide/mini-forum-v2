@@ -32,4 +32,8 @@ export class MessagesService {
     deleteMessage(message: Message): Observable<any> {
         return this.httpClient.delete(this.apiUrl + message.id);
     }
+
+    updateMessage(message: Message,newContent: string): Observable<Message> {
+        return this.httpClient.patch<Message>(this.apiUrl+ message.id, {content:newContent});
+    }
 }
