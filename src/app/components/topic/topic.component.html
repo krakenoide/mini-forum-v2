@@ -7,7 +7,7 @@
     <p id="topic-infos">{{ topic | topicInfos }}</p>
     
     <ul>
-        <li *ngFor="let message of topic.messages">
+        <li *ngFor="let message of topic.messages" class="boite">
             <span *ngIf="connectedUser.username===message.author.username" class="currentuser">
             <h3>{{ message | messageInfos }}</h3>
     
@@ -17,6 +17,9 @@
                 <h3>{{ message | messageInfos }}</h3>
         
                 <p>{{ message.content }}</p>
+            </span>
+            <span *ngIf="connectedUser.admin===true" class="action-buttons-container">
+                <button mat-raised-button color="warn" (click)="onDeleteMessage(message)">Supprimer</button>
             </span>
         </li>
     </ul>
