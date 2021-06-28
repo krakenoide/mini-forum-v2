@@ -15,7 +15,7 @@ import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm.component
 export class UsersPageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   filterControl: FormControl;
-  
+
   users: User[] = [];
   filteredUsers: User[] = [];
   usersSubscription: Subscription;
@@ -33,33 +33,40 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private usersService: UsersService,
     private dialog: MatDialog) { }
-  
+
 
   ngOnInit(): void {
+    this.usersService.getUsers();
+    
+    console.log(this.filteredUsers);
+
+    this.editUserControl = this.formBuilder.control('');
+
     this.usersService.usersSubject.subscribe((users: User[]) => {
       this.users = users;
       this.filteredUsers = users;
 
       this.filterControl = this.formBuilder.control('');
 
+      
+
       this.filterControl.valueChanges.subscribe(filterValue => {
-          if (filterValue) {
-              this.filteredUsers = this.users.filter(user => user.username.includes(filterValue));
-          } else {
-              this.filteredUsers = this.users;
-          }
+        if (filterValue) {
+          this.filteredUsers = this.users.filter(user => user.username.includes(filterValue));
+        } else {
+          this.filteredUsers = this.users;
+        }
       });
+
+
+    });
     this.usersService.emitUsers();
+    
 
     this.usersService.connectedUserSubject.subscribe((user: User) => {
       this.connectedUser = user;
     });
     this.usersService.emitConnectedUser();
-
-    this.editUserControl = this.formBuilder.control(['']);
-    });
-
-    
   }
 
   ngOnDestroy(): void {
@@ -71,70 +78,70 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   onChangeEditedUser(user: User): void {
     this.editedUser = (this.editedUser === user) ? undefined : user;
     this.editUserControl.setValue(user.username);
-  } 
+  }
 
   onEditUser(user: User): void {
     if (this.editUserControl.valid) {
-      user.username=this.editUserControl.value;
+      user.username = this.editUserControl.value;
       this.usersService.updateUser(user).subscribe((user: User) => {
-          this.usersService.users = this.usersService.users.map((userElt: User) => {
-              if (userElt.id === user.id) {
-                  userElt.username = user.username;
-              }
+        this.usersService.users = this.usersService.users.map((userElt: User) => {
+          if (userElt.id === user.id) {
+            userElt.username = user.username;
+          }
 
-              return userElt;
-           });
+          return userElt;
+        });
 
-           this.usersService.emitUsers();
+        this.usersService.emitUsers();
 
-           this.snackBar.open("L'utilisateur a bien été modifié", "Fermer", { duration: 3000 });
+        this.snackBar.open("L'utilisateur a bien été modifié", "Fermer", { duration: 3000 });
 
-           this.editedUser = undefined;
+        this.editedUser = undefined;
       }, error => {
-          this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
+        this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
       });
-  }
+    }
   }
 
   onDeleteUser(user: User): void {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
-          title: "Êtes-vous sûr de vouloir supprimer ce sujet ?",
-          content: "Cette action est irréversible.",
-          action: "Supprimer"
+        title: "Êtes-vous sûr de vouloir supprimer ce sujet ?",
+        content: "Cette action est irréversible.",
+        action: "Supprimer"
       },
       autoFocus: false
-  });
+    });
 
     this.dialogRefSubscription = dialogRef.afterClosed().subscribe(confirm => {
       if (confirm) {
-          this.usersService.deleteUser(user).subscribe(response => {
-              this.usersService.users = this.usersService.users.filter(userElt => userElt.id !== user.id);
-              this.usersService.emitUsers();
-  
-              this.editedUser = undefined;
-  
-              this.snackBar.open("L'utilisateur a bien été supprimé", "Fermer", { duration: 3000 });
-          }, error => {
-              this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
-          });
+        this.usersService.deleteUser(user).subscribe(response => {
+          this.usersService.users = this.usersService.users.filter(userElt => userElt.id !== user.id);
+          this.usersService.emitUsers();
+
+          this.editedUser = undefined;
+
+          this.snackBar.open("L'utilisateur a bien été supprimé", "Fermer", { duration: 3000 });
+        }, error => {
+          this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
+        });
       }
-  });
+    });
   }
 
-  getErrorMessage(formControlName: string | null, formControlParam?: FormControl): string|void {
+  getErrorMessage(formControlName: string | null, formControlParam?: FormControl): string | void {
     const formControl = (formControlName !== null) ? this.form.controls[formControlName] : formControlParam;
 
     if (formControl!.hasError("required")) {
-        return "Ce champ est obligatoire";
+      return "Ce champ est obligatoire";
     }
 
     if (formControl!.hasError("minlength")) {
-        return "Vous devez entrer au moins " + formControl!.getError("minlength").requiredLength + " caractères";
+      return "Vous devez entrer au moins " + formControl!.getError("minlength").requiredLength + " caractères";
     }
 
     if (formControl!.hasError("maxlength")) {
-        return "Vous ne pouvez pas entrer plus de " + formControl!.getError("maxlength").requiredLength + " caractères";
+      return "Vous ne pouvez pas entrer plus de " + formControl!.getError("maxlength").requiredLength + " caractères";
     }
   }
 
