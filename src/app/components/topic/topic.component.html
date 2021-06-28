@@ -25,11 +25,18 @@
                 <mat-error *ngIf="editMessageControl.invalid">{{ getErrorMessage("editedMessage") }}</mat-error>
             </mat-form-field>
 
-            <span *ngIf="connectedUser.admin===true || connectedUser.id===message.author.id" class="action-buttons-container">
+            <span *ngIf="connectedUser.admin===true && connectedUser.id!==message.author.id" class="action-buttons-other-container">
                 <button mat-raised-button color="primary" *ngIf="editedMessage !== message && connectedUser.id===message.author.id" (click)="onChangeEditedMessage(message)">Modifier</button>
                 <button mat-raised-button color="accent" *ngIf="editedMessage === message && connectedUser.id===message.author.id" (click)="onEditMessage(message)">Enregistrer</button>
                 <button mat-raised-button color="warn"  (click)="onDeleteMessage(message)">Supprimer</button>
-          </span>
+            </span>
+
+            <span *ngIf="connectedUser.admin===false || connectedUser.id===message.author.id " class="action-buttons-container">
+                <button mat-raised-button color="primary" *ngIf="editedMessage !== message && connectedUser.id===message.author.id" (click)="onChangeEditedMessage(message)">Modifier</button>
+                <button mat-raised-button color="accent" *ngIf="editedMessage === message && connectedUser.id===message.author.id" (click)="onEditMessage(message)">Enregistrer</button>
+                <button mat-raised-button color="warn" *ngIf="connectedUser.id===message.author.id"  (click)="onDeleteMessage(message)">Supprimer</button>
+            </span>
+
         </li>
     </ul>
 </div>
