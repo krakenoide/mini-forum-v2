@@ -37,8 +37,6 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.usersService.getUsers();
-    
-    console.log(this.filteredUsers);
 
     this.editUserControl = this.formBuilder.control('');
 
@@ -48,7 +46,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
       this.filterControl = this.formBuilder.control('');
 
-      
+
 
       this.filterControl.valueChanges.subscribe(filterValue => {
         if (filterValue) {
@@ -61,7 +59,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
     });
     this.usersService.emitUsers();
-    
+
 
     this.usersService.connectedUserSubject.subscribe((user: User) => {
       this.connectedUser = user;
@@ -73,6 +71,12 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     if (this.usersSubscription) {
       this.usersSubscription.unsubscribe();
     }
+    if (this.dialogRefSubscription) {
+      this.dialogRefSubscription.unsubscribe();
+    }
+    if (this.connectedUserSubscription) {
+      this.connectedUserSubscription.unsubscribe();
+    }
   }
 
   onChangeEditedUser(user: User): void {
@@ -82,8 +86,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
   onEditUser(user: User): void {
     if (this.editUserControl.valid) {
-      user.username = this.editUserControl.value;
-      this.usersService.updateUser(user).subscribe((user: User) => {
+      this.usersService.updateUserAdmin(user, this.editUserControl.value, this.connectedUser).subscribe((user: User) => {
         this.usersService.users = this.usersService.users.map((userElt: User) => {
           if (userElt.id === user.id) {
             userElt.username = user.username;
@@ -92,6 +95,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
           return userElt;
         });
 
+        this.usersService.getUsers();
         this.usersService.emitUsers();
 
         this.snackBar.open("L'utilisateur a bien été modifié", "Fermer", { duration: 3000 });
@@ -101,6 +105,22 @@ export class UsersPageComponent implements OnInit, OnDestroy {
         this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
       });
     }
+  }
+
+  changeRights(user: User): void {
+    console.log(user.admin);
+    this.usersService.userToAdmin(user, user.username, this.connectedUser, !user.admin).subscribe((user: User) => {
+
+      this.usersService.getUsers();
+      this.usersService.emitUsers();
+
+      this.snackBar.open("Les droits utilisateur ont bien été modifiés", "Fermer", { duration: 3000 });
+
+      this.editedUser = undefined;
+    }, error => {
+      this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
+    });
+
   }
 
   onDeleteUser(user: User): void {

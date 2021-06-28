@@ -7,18 +7,19 @@
     <ul>
         <li *ngFor="let user of filteredUsers">
             <span *ngIf="editedUser !== user">{{ user.username }}</span>
+            <span *ngIf="editedUser !== user && user.admin">, Admin</span>
 
             <mat-form-field *ngIf="editedUser === user">
-                <mat-label>Titre</mat-label>
+                <mat-label>Pseudo</mat-label>
                 <input type="text" matInput required [formControl]="editUserControl">
                 <mat-error *ngIf="editUserControl.invalid">{{ getErrorMessage(null, editUserControl) }}</mat-error>
             </mat-form-field>
 
             
-            <div class="action-buttons-container" *ngIf="connectedUser.admin || user.id===connectedUser.id">
+            <div class="action-buttons-container">
                     <button mat-raised-button color="primary" *ngIf="editedUser !== user" (click)="onChangeEditedUser(user)">Modifier</button>
                     <button mat-raised-button color="accent" *ngIf="editedUser === user" (click)="onEditUser(user)">Enregistrer</button>
-
+                    <button mat-raised-button color="green" (click)="changeRights(user)">Changer les droits</button>
                     <button mat-raised-button color="warn" (click)="onDeleteUser(user)">Supprimer</button>
             </div>
             
