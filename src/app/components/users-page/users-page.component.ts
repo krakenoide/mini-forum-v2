@@ -126,7 +126,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   onDeleteUser(user: User): void {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
-        title: "Êtes-vous sûr de vouloir supprimer ce sujet ?",
+        title: "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
         content: "Cette action est irréversible.",
         action: "Supprimer"
       },
