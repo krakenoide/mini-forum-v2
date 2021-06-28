@@ -83,13 +83,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
         this.editTopicControl = this.formBuilder.control(['', [Validators.minLength(5), Validators.maxLength(100)]]);
     }
 
-    loadTopic():void {
-       
-
-       
-    }
-
-
     onChangeEditedTopic(topic: Topic): void {
         this.editedTopic = (this.editedTopic === topic) ? undefined : topic;
         this.editTopicControl.setValue(topic.title);
