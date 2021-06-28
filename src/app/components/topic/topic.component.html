@@ -8,9 +8,16 @@
     
     <ul>
         <li *ngFor="let message of topic.messages">
+            <span *ngIf="connectedUser.username===message.author.username" class="currentuser">
             <h3>{{ message | messageInfos }}</h3>
     
             <p>{{ message.content }}</p>
+            </span>
+            <span *ngIf="connectedUser.username!=message.author.username" class="otheruser">
+                <h3>{{ message | messageInfos }}</h3>
+        
+                <p>{{ message.content }}</p>
+            </span>
         </li>
     </ul>
 </div>
