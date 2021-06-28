@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { UsersService } from 'src/app/services/UsersService';
+import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm.component';
 
 @Component({
   selector: 'users-page',
@@ -24,6 +25,8 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
   editedUser?: User;
   editUserControl: FormControl;
+
+  dialogRefSubscription: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,7 +75,8 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
   onEditUser(user: User): void {
     if (this.editUserControl.valid) {
-      this.usersService.updateUser(user, this.editUserControl.value).subscribe((user: User) => {
+      user.username=this.editUserControl.value;
+      this.usersService.updateUser(user).subscribe((user: User) => {
           this.usersService.users = this.usersService.users.map((userElt: User) => {
               if (userElt.id === user.id) {
                   userElt.username = user.username;
@@ -92,7 +96,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   }
   }
 
-  onDeleteTopic(topic: User): void {
+  onDeleteUser(user: User): void {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
           title: "Êtes-vous sûr de vouloir supprimer ce sujet ?",
@@ -104,11 +108,11 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
     this.dialogRefSubscription = dialogRef.afterClosed().subscribe(confirm => {
       if (confirm) {
-          this.topicsService.deleteTopic(topic).subscribe(response => {
-              this.topicsService.topics = this.topicsService.topics.filter(topicElt => topicElt.id !== topic.id);
-              this.topicsService.emitTopics();
+          this.usersService.deleteUser(user).subscribe(response => {
+              this.usersService.users = this.usersService.users.filter(userElt => userElt.id !== user.id);
+              this.usersService.emitUsers();
   
-              this.editedTopic = undefined;
+              this.editedUser = undefined;
   
               this.snackBar.open("L'utilisateur a bien été supprimé", "Fermer", { duration: 3000 });
           }, error => {
@@ -121,16 +125,16 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   getErrorMessage(formControlName: string | null, formControlParam?: FormControl): string|void {
     const formControl = (formControlName !== null) ? this.form.controls[formControlName] : formControlParam;
 
-    if (formControl!.hasError('required')) {
-        return 'Ce champ est obligatoire';
+    if (formControl!.hasError("required")) {
+        return "Ce champ est obligatoire";
     }
 
-    if (formControl!.hasError('minlength')) {
-        return 'Vous devez entrer au moins ' + formControl!.getError('minlength').requiredLength + ' caractères';
+    if (formControl!.hasError("minlength")) {
+        return "Vous devez entrer au moins " + formControl!.getError("minlength").requiredLength + " caractères";
     }
 
-    if (formControl!.hasError('maxlength')) {
-        return 'Vous ne pouvez pas entrer plus de ' + formControl!.getError('maxlength').requiredLength + ' caractères';
+    if (formControl!.hasError("maxlength")) {
+        return "Vous ne pouvez pas entrer plus de " + formControl!.getError("maxlength").requiredLength + " caractères";
     }
   }
 
