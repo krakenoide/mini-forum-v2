@@ -27,9 +27,9 @@ export class MessageStylePipe implements PipeTransform {
   // https://www.regextester.com/97589
 
   replaceWithRegex(str:string):string  { 
-    
+
     str = str.replace(/\[([b,i,u]?)\]/gm,"<$1>") ;
-    str = str.replace(/\[\/([b,i,u]?)\]/gm, "<$1>");
+    str = str.replace(/\[\/([b,i,u]?)\]/gm, "</$1>");
 
     return  str;   
   }
