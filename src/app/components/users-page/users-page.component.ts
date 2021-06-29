@@ -88,7 +88,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
   onEditUser(user: User): void {
     if (this.editUserControl.valid) {
-      this.usersService.updateUserAdmin(user, this.editUserControl.value, this.connectedUser).subscribe((user: User) => {
+      this.usersService.updateUserAdmin(user, this.editUserControl.value, this.connectedUser, !user.admin).subscribe((user: User) => {
         this.usersService.users = this.usersService.users.map((userElt: User) => {
           if (userElt.id === user.id) {
             userElt.username = user.username;

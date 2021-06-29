@@ -67,8 +67,8 @@ export class UsersService {
         return this.httpClient.patch<User>(this.apiUrl + 'api/user/' + user.id, user);
     }
 
-    updateUserAdmin(user: User, nusername: string, admin: User): Observable<User> {
-        return this.httpClient.patch<User>(this.apiUrl + 'api/user/' + user.id, {username:nusername,connectedUser:admin});
+    updateUserAdmin(user: User, nusername: string, admin: User, droit: boolean): Observable<User> {
+        return this.httpClient.patch<User>(this.apiUrl + 'api/user/' + user.id, {username:nusername,connectedUser:admin, isAdmin: droit});
     }
 
     userToAdmin(user: User, username: string,admin: User, droit: boolean): Observable<User> {
