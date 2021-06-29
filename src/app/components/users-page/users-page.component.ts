@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { UsersService } from 'src/app/services/UsersService';
 import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'users-page',
@@ -32,6 +33,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private usersService: UsersService,
+    private router: Router,
     private dialog: MatDialog) { }
 
 
@@ -115,7 +117,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
       this.usersService.emitUsers();
 
       this.snackBar.open("Les droits utilisateur ont bien été modifiés", "Fermer", { duration: 3000 });
-
+      this.router.navigate(['users-page']);
       this.editedUser = undefined;
     }, error => {
       this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
