@@ -15,6 +15,13 @@ export class UsersService {
 
     constructor(private httpClient: HttpClient) {
         this.setConnectedUserFromLocalStorage();
+        this.httpClient.get<User[]>(this.apiUrl + 'api/user', { observe: 'body' }).subscribe((users: User[]) => {
+            this.users = users.map(user => {
+                return user;
+            });
+
+            this.emitUsers();
+        });
     }
 
     emitUsers(): void {
@@ -58,5 +65,17 @@ export class UsersService {
 
     updateUser(user: User): Observable<User> {
         return this.httpClient.patch<User>(this.apiUrl + 'api/user/' + user.id, user);
+    }
+
+    updateUserAdmin(user: User, nusername: string, admin: User, droit: boolean): Observable<User> {
+        return this.httpClient.patch<User>(this.apiUrl + 'api/user/' + user.id, {username:nusername,connectedUser:admin, isAdmin: droit});
+    }
+
+    userToAdmin(user: User, username: string,admin: User, droit: boolean): Observable<User> {
+        return this.httpClient.patch<User>(this.apiUrl + 'api/user/' + user.id, {username:username,connectedUser:admin, isAdmin: droit});
+    }
+
+    deleteUser(user:User): Observable<User> {
+        return this.httpClient.delete<User>(this.apiUrl + 'api/user/' + user.id);
     }
 }
