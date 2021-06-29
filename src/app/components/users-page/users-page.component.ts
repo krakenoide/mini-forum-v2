@@ -120,15 +120,9 @@ export class UsersPageComponent implements OnInit, OnDestroy {
       });
 
       this.usersService.emitUsers();
-
-      this.usersService.usersSubject.subscribe((users:User[]) => {
-        this.filteredUsers=users;
-        this.users=users;
-      }) ;
       
       this.router.navigate(["users-page"]);
       
-
       this.snackBar.open("Les droits utilisateur ont bien été modifiés", "Fermer", { duration: 3000 });
       this.editedUser = undefined;
     }, error => {
