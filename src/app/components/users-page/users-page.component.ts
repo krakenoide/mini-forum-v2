@@ -109,20 +109,22 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   }
 
   changeRights(user: User): void {
-    console.log(user.admin);
     this.usersService.userToAdmin(user, user.username, this.connectedUser, !user.admin).subscribe((user: User) => {
       this.usersService.users = this.usersService.users.map((userElt: User) => {
+        
         if (userElt.id === user.id) {
           userElt.admin = user.admin;
+          console.log(userElt.admin);
         }
 
         return userElt;
       });
 
       this.usersService.emitUsers();
+      this.usersService.saveConnectedUserToLocalStorage(this.connectedUser);
+      
 
       this.snackBar.open("Les droits utilisateur ont bien été modifiés", "Fermer", { duration: 3000 });
-      this.router.navigate(['users-page']);
       this.editedUser = undefined;
     }, error => {
       this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
@@ -161,14 +163,6 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
     if (formControl!.hasError("required")) {
       return "Ce champ est obligatoire";
-    }
-
-    if (formControl!.hasError("minlength")) {
-      return "Vous devez entrer au moins " + formControl!.getError("minlength").requiredLength + " caractères";
-    }
-
-    if (formControl!.hasError("maxlength")) {
-      return "Vous ne pouvez pas entrer plus de " + formControl!.getError("maxlength").requiredLength + " caractères";
     }
   }
 
