@@ -12,12 +12,12 @@
             <span *ngIf="connectedUser.id===message.author.id" class="currentuser">
             <h3>{{ message | messageInfos }}</h3>
     
-            <p>{{ message.content }}</p>
+            <p [innerHTML]="message.content | styletext"></p>
             </span>
             <span *ngIf="connectedUser.id!=message.author.id" class="otheruser">
                 <h3>{{ message | messageInfos }}</h3>
         
-                <p>{{ message.content }}</p>
+                <p [innerHTML]="message.content | styletext"></p>
             </span>
             <span *ngIf="connectedUser.admin===true" class="action-buttons-container">
                 <button mat-raised-button color="warn" (click)="onDeleteMessage(message)">Supprimer</button>
@@ -27,7 +27,7 @@
                 
             <h3>{{ message | messageInfos }}</h3>
     
-            <p>{{ message.content }}</p>
+            <p [innerHTML]="message.content | styletext"></p>
         </span>
         </li>
     </ul>

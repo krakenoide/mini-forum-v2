@@ -24,6 +24,7 @@ import { DialogConfirmComponent } from './dialogs/dialog-confirm.component';
 /* Pipes */
 import { TopicInfosPipe } from './pipes/TopicInfos.pipe';
 import { MessageInfosPipe } from './pipes/MessageInfos.pipe';
+import { StyleTextPipe } from './pipes/StyleText.pipe';
 
 /* Services */
 import { UsersService } from './services/UsersService';
@@ -49,7 +50,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         TopicComponent,
         TopicInfosPipe,
         MessageInfosPipe,
-        DialogConfirmComponent
+        DialogConfirmComponent,
+        StyleTextPipe
     ],
     imports: [
         BrowserModule,

@@ -8,7 +8,6 @@ import { Topic } from 'src/app/models/Topic';
 import { User } from 'src/app/models/User';
 import { TopicsService } from 'src/app/services/TopicsService';
 import { UsersService } from 'src/app/services/UsersService';
-import { takeWhile } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Component({
@@ -33,7 +32,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
     dialogRefSubscription: Subscription;
 
     refreshTopicInterval: any;
-
 
 
     constructor(
@@ -84,9 +82,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
     }
 
     loadTopic():void {
-       
-
-       
     }
 
 
@@ -199,4 +194,5 @@ export class HomepageComponent implements OnInit, OnDestroy {
             return 'Vous ne pouvez pas entrer plus de ' + formControl!.getError('maxlength').requiredLength + ' caractères';
         }
     }
+
 }
