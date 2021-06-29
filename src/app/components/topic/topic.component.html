@@ -14,7 +14,7 @@
                 <p [innerHTML] =  "message | messageStyle" > </p>
             
             </span>
-            
+
             <span *ngIf="connectedUser.username!=message.author.username" class="otheruser">
                 <h3>{{ message | messageInfos }}</h3>
         
@@ -31,7 +31,7 @@
                 <button mat-raised-button color="warn"  (click)="onDeleteMessage(message)">Supprimer</button>
             </span>
 
-            <span *ngIf="connectedUser.admin===false || connectedUser.id===message.author.id " class="action-buttons-container">
+            <span *ngIf="connectedUser.id===message.author.id " class="action-buttons-container">
                 <button mat-raised-button color="primary" *ngIf="editedMessage !== message && connectedUser.id===message.author.id" (click)="onChangeEditedMessage(message)">Modifier</button>
                 <button mat-raised-button color="accent" *ngIf="editedMessage === message && connectedUser.id===message.author.id" (click)="onEditMessage(message)">Enregistrer</button>
                 <button mat-raised-button color="warn" *ngIf="connectedUser.id===message.author.id"  (click)="onDeleteMessage(message)">Supprimer</button>

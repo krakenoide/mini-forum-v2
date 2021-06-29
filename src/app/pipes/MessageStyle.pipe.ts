@@ -21,7 +21,6 @@ export class MessageStylePipe implements PipeTransform {
     return  str;   
   }
 
-
   // Regex Testers
   // https://regex101.com/r/ijxJPG/1/
   // https://www.regextester.com/97589
@@ -35,4 +34,6 @@ export class MessageStylePipe implements PipeTransform {
   }
 
 }
+
+
 
