@@ -16,6 +16,5 @@ export const routes: Routes = [
     { path: 'edit-user', canActivate: [EditUserGuard], component: EditUserComponent },
     { path: 'topic/:id', component: TopicComponent },
     { path: 'logout', component: LogoutComponent },
-    // { path: 'users-page', canActivate: [userPageGuard] ,component: UsersPageComponent }
-    { path: 'users-page',component: UsersPageComponent }
+    { path: 'users-page', canActivate: [userPageGuard], component: UsersPageComponent }
 ];

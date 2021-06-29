@@ -114,16 +114,15 @@ export class UsersPageComponent implements OnInit, OnDestroy {
         
         if (userElt.id === user.id) {
           userElt.admin = user.admin;
-          console.log(userElt.admin);
         }
 
         return userElt;
       });
 
       this.usersService.emitUsers();
-      this.usersService.saveConnectedUserToLocalStorage(this.connectedUser);
       
-
+      this.router.navigate(["users-page"]);
+      
       this.snackBar.open("Les droits utilisateur ont bien été modifiés", "Fermer", { duration: 3000 });
       this.editedUser = undefined;
     }, error => {
