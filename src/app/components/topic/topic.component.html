@@ -11,12 +11,12 @@
             <span *ngIf="connectedUser.username===message.author.username" class="currentuser">
             <h3>{{ message | messageInfos }}</h3>
     
-            <p>{{ message  | messageStyle }}</p>
+            <p [innerHTML] =  "message | messageStyle" > </p>
             </span>
             <span *ngIf="connectedUser.username!=message.author.username" class="otheruser">
                 <h3>{{ message | messageInfos }}</h3>
         
-                <p [innerHTML] =  "message | messageStyle " > </p>
+                <p [innerHTML] =  "message | messageStyle" > </p>
             </span>
 
             <mat-form-field *ngIf="editedMessage === message">

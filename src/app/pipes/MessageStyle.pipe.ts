@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform, Sanitizer, SecurityContext } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { Message } from '../models/Message';
 
 @Pipe({
@@ -7,7 +7,6 @@ import { Message } from '../models/Message';
 export class MessageStylePipe implements PipeTransform {
 
   constructor(
-    private sanitizer: Sanitizer
   ) {}
 
   transform(message: Message): string {
@@ -15,9 +14,11 @@ export class MessageStylePipe implements PipeTransform {
   }
 
   replace(str:string):string  { 
-    // return str.replace('\[b\](.*?)\[/b\]', '<b>$1</b>');
-    return str.replace('\[b\](.*?)\[/b\]', '<b>bold</b>');
-    
+    while (str.includes('[')){
+      str = str.replace('[', '<');
+      str = str.replace(']', '>');
+    }
+    return  str;   
   }
 
 
