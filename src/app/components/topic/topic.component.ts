@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -29,7 +29,12 @@ export class TopicComponent implements OnInit, OnDestroy {
     refreshMessageInterval: any;
     dialogRefSubscription: Subscription;
 
+<<<<<<< HEAD
     bbcodeinfo:number=0;
+=======
+    editedMessage?: Message;
+    editMessageControl: FormControl;
+>>>>>>> 70d4268a70bd8698cf504dc8873442a35a7b8363
 
     constructor(
         private formBuilder: FormBuilder,
@@ -64,8 +69,12 @@ export class TopicComponent implements OnInit, OnDestroy {
         this.usersService.emitConnectedUser();
 
         this.refreshMessageInterval = setInterval(() => {
-            this.onRefreshMessages(false);
+            if(!this.editedMessage){
+                this.onRefreshMessages(false);
+            }
         }, 10000);
+
+        this.editMessageControl = this.formBuilder.control(['', [Validators.minLength(5), Validators.maxLength(3000)]]);
     }
 
     onRefreshMessages(snackbarMessage:boolean): void {
@@ -151,6 +160,33 @@ export class TopicComponent implements OnInit, OnDestroy {
         }
     }
 
+    onChangeEditedMessage(message: Message): void {
+        this.editedMessage = (this.editedMessage === message) ? undefined : message;
+        this.editMessageControl.setValue(message.content);
+    }
+
+    onEditMessage(message: Message): void {
+        if (this.editMessageControl.valid) {
+            this.messagesService.updateMessage(message, this.editMessageControl.value).subscribe((message: Message) => {
+                this.messagesService.messages = this.messagesService.messages.map((messageElt: Message) => {
+                    if (messageElt.id === message.id) {
+                        messageElt.content = message.content;
+                    }
+                    return messageElt;
+                 });
+
+                 this.messagesService.emitMessages();
+                 this.onRefreshMessages(false);
+
+                 this.snackBar.open('Le message a bien été modifié', 'Fermer', { duration: 3000 });
+
+                 this.editedMessage = undefined;
+            }, error => {
+                this.snackBar.open('Une erreur est survenue. Veuillez vérifier votre saisie', 'Fermer', { duration: 3000 });
+            });
+        }
+    }
+
     onDeleteMessage(message:Message):void{
         const dialogRef = this.dialog.open(DialogConfirmComponent, {
             data: {
@@ -166,7 +202,7 @@ export class TopicComponent implements OnInit, OnDestroy {
                 this.messagesService.deleteMessage(message).subscribe(response => {
                     this.messagesService.messages = this.messagesService.messages.filter(messageElt => messageElt.id !== message.id);
                     this.messagesService.emitMessages();
-        
+                    this.onRefreshMessages(false);
                     this.snackBar.open('Le message a bien été supprimé', 'Fermer', { duration: 3000 });
                 }, error => {
                     this.snackBar.open('Une erreur est survenue. Veuillez vérifier votre saisie', 'Fermer', { duration: 3000 });

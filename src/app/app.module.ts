@@ -17,6 +17,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TopicComponent } from './components/topic/topic.component';
+import { UsersPageComponent } from './components/users-page/users-page.component';
 
 /* Dialogs */
 import { DialogConfirmComponent } from './dialogs/dialog-confirm.component';
@@ -24,7 +25,11 @@ import { DialogConfirmComponent } from './dialogs/dialog-confirm.component';
 /* Pipes */
 import { TopicInfosPipe } from './pipes/TopicInfos.pipe';
 import { MessageInfosPipe } from './pipes/MessageInfos.pipe';
+<<<<<<< HEAD
 import { StyleTextPipe } from './pipes/StyleText.pipe';
+=======
+import { MessageStylePipe } from './pipes/MessageStyle.pipe';
+>>>>>>> 70d4268a70bd8698cf504dc8873442a35a7b8363
 
 /* Services */
 import { UsersService } from './services/UsersService';
@@ -50,8 +55,14 @@ import { MatDialogModule } from '@angular/material/dialog';
         TopicComponent,
         TopicInfosPipe,
         MessageInfosPipe,
+<<<<<<< HEAD
         DialogConfirmComponent,
         StyleTextPipe
+=======
+        MessageStylePipe,
+        DialogConfirmComponent,
+        UsersPageComponent
+>>>>>>> 70d4268a70bd8698cf504dc8873442a35a7b8363
     ],
     imports: [
         BrowserModule,
