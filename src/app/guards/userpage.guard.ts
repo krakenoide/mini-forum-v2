@@ -24,6 +24,7 @@ export class userPageGuard implements CanActivate {
 
                 observer.complete();
             });
+            this.usersService.emitConnectedUser();
         });
     }
 }
