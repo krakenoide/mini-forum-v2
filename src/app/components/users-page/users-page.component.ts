@@ -97,7 +97,6 @@ export class UsersPageComponent implements OnInit, OnDestroy {
           return userElt;
         });
 
-        this.usersService.getUsers();
         this.usersService.emitUsers();
 
         this.snackBar.open("L'utilisateur a bien été modifié", "Fermer", { duration: 3000 });
@@ -112,8 +111,14 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   changeRights(user: User): void {
     console.log(user.admin);
     this.usersService.userToAdmin(user, user.username, this.connectedUser, !user.admin).subscribe((user: User) => {
+      this.usersService.users = this.usersService.users.map((userElt: User) => {
+        if (userElt.id === user.id) {
+          userElt.admin = user.admin;
+        }
 
-      this.usersService.getUsers();
+        return userElt;
+      });
+
       this.usersService.emitUsers();
 
       this.snackBar.open("Les droits utilisateur ont bien été modifiés", "Fermer", { duration: 3000 });
