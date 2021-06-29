@@ -17,6 +17,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TopicComponent } from './components/topic/topic.component';
+import { UsersPageComponent } from './components/users-page/users-page.component';
 
 /* Dialogs */
 import { DialogConfirmComponent } from './dialogs/dialog-confirm.component';
@@ -51,7 +52,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         TopicInfosPipe,
         MessageInfosPipe,
         MessageStylePipe,
-        DialogConfirmComponent
+        DialogConfirmComponent,
+        UsersPageComponent
     ],
     imports: [
         BrowserModule,

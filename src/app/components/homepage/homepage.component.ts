@@ -56,7 +56,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
             });
         });
 
+
         this.usersService.emitConnectedUser();
+        
+        console.log(this.connectedUser);
 
 
         this.topicsService.topicsSubject.subscribe((topics: Topic[]) => {
