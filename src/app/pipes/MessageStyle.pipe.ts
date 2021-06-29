@@ -21,6 +21,11 @@ export class MessageStylePipe implements PipeTransform {
     return  str;   
   }
 
+
+  // Regex Testers
+  // https://regex101.com/r/ijxJPG/1/
+  // https://www.regextester.com/97589
+
   replaceWithRegex(str:string):string  { 
     
     str = str.replace(/\[([b,i,u]?)\]/gm,"<$1>") ;
@@ -30,3 +35,4 @@ export class MessageStylePipe implements PipeTransform {
   }
 
 }
+
