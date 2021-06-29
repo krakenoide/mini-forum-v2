@@ -10,7 +10,7 @@ export class MessageStylePipe implements PipeTransform {
   ) {}
 
   transform(message: Message): string {
-    return this.replace(message.content);
+    return this.replaceWithRegex(message.content);
   }
 
   replace(str:string):string  { 
@@ -21,5 +21,12 @@ export class MessageStylePipe implements PipeTransform {
     return  str;   
   }
 
+  replaceWithRegex(str:string):string  { 
+    
+    str = str.replace(/\[([b,i,u]?)\]/gm,"<$1>") ;
+    str = str.replace(/\[\/([b,i,u]?)\]/gm, "<$1>");
+
+    return  str;   
+  }
 
 }
