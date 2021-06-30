@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Message } from '../models/Message';
 
 @Pipe({
-  name: 'messageStyle'
+  name: 'messageBBCode'
 })
-export class MessageStylePipe implements PipeTransform {
+export class MessageBBCodePipe implements PipeTransform {
 
   constructor(
   ) {}
@@ -14,10 +14,12 @@ export class MessageStylePipe implements PipeTransform {
   }
 
   replace(str:string):string  { 
+
     while (str.includes('[')){
       str = str.replace('[', '<');
       str = str.replace(']', '>');
     }
+    
     return  str;   
   }
 

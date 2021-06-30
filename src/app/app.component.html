@@ -1,17 +1,32 @@
 <header>
     <nav>
-        <ul>
+        <ul >
             <li routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }"><a routerLink="/">Accueil</a></li>
             <li *ngIf="!connectedUser" routerLinkActive="nav-active"><a routerLink="sign-in">Créer un compte</a></li>
             <li *ngIf="!connectedUser" routerLinkActive="nav-active"><a routerLink="login">Se connecter</a></li>
             <li *ngIf="connectedUser" routerLinkActive="nav-active"><a routerLink="edit-user">Modifier mon compte</a></li>
-            <li *ngIf="connectedUser"><span *ngIf="connectedUser.admin" routerLinkActive="nav-active"><a routerLink="users-page">Liste des utilisateurs</a></span></li>
+            <li *ngIf="connectedUser" routerLinkActive="nav-active"><span *ngIf="connectedUser.admin" ><a routerLink="users-page">Liste des utilisateurs</a></span></li>
             <li *ngIf="connectedUser" routerLinkActive="nav-active"><a routerLink="logout">Se déconnecter</a></li>
             
         </ul>
+
+
+
     </nav>
 </header>
 
 <main>
     <router-outlet></router-outlet>
 </main>
+
+
+<!-- 
+<ul >
+    <li routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }"><a routerLink="/">Accueil</a></li>
+    <li *ngIf="!connectedUser" routerLinkActive="nav-active"><a routerLink="sign-in">Créer un compte</a></li>
+    <li *ngIf="!connectedUser" routerLinkActive="nav-active"><a routerLink="login">Se connecter</a></li>
+    <li *ngIf="connectedUser" routerLinkActive="nav-active"><a routerLink="edit-user">Modifier mon compte</a></li>
+    <li *ngIf="connectedUser"><span *ngIf="connectedUser.admin" routerLinkActive="nav-active"><a routerLink="users-page">Liste des utilisateurs</a></span></li>
+    <li *ngIf="connectedUser" routerLinkActive="nav-active"><a routerLink="logout">Se déconnecter</a></li>
+    
+</ul> -->

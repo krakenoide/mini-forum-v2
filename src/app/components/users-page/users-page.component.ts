@@ -48,8 +48,6 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
       this.filterControl = this.formBuilder.control('');
 
-
-
       this.filterControl.valueChanges.subscribe(filterValue => {
         if (filterValue) {
           this.filteredUsers = this.users.filter(user => user.username.includes(filterValue));
@@ -58,10 +56,8 @@ export class UsersPageComponent implements OnInit, OnDestroy {
         }
       });
 
-
     });
     this.usersService.emitUsers();
-
 
     this.usersService.connectedUserSubject.subscribe((user: User) => {
       this.connectedUser = user;
@@ -90,6 +86,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     if (this.editUserControl.valid) {
       this.usersService.updateUserAdmin(user, this.editUserControl.value, this.connectedUser, !user.admin).subscribe((user: User) => {
         this.usersService.users = this.usersService.users.map((userElt: User) => {
+
           if (userElt.id === user.id) {
             userElt.username = user.username;
           }
@@ -108,7 +105,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeRights(user: User): void {
+  invertRights(user: User): void {
     this.usersService.userToAdmin(user, user.username, this.connectedUser, !user.admin).subscribe((user: User) => {
       this.usersService.users = this.usersService.users.map((userElt: User) => {
         
@@ -123,7 +120,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
       
       this.router.navigate(["users-page"]);
       
-      this.snackBar.open("Les droits utilisateur ont bien été modifiés", "Fermer", { duration: 3000 });
+      this.snackBar.open("Les droits d'administration de l'utilisateur ont bien été modifiés", "Fermer", { duration: 3000 });
       this.editedUser = undefined;
     }, error => {
       this.snackBar.open("Une erreur est survenue. Veuillez vérifier votre saisie", "Fermer", { duration: 3000 });
