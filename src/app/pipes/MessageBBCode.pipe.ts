@@ -13,6 +13,8 @@ export class MessageBBCodePipe implements PipeTransform {
     return this.replaceWithRegex(message.content);
   }
 
+  //not currentky used, just another option to replace characters
+
   replace(str:string):string  { 
 
     while (str.includes('[')){

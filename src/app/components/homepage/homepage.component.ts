@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription ,interval, Observable} from 'rxjs';
+import { Subscription } from 'rxjs';
 import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm.component';
 import { Topic } from 'src/app/models/Topic';
 import { User } from 'src/app/models/User';
 import { TopicsService } from 'src/app/services/TopicsService';
 import { UsersService } from 'src/app/services/UsersService';
-import { takeWhile } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Component({
